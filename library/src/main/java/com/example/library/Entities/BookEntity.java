@@ -3,20 +3,22 @@ package com.example.library.Entities;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
 public class BookEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
+    /*@Id
     @GeneratedValue(generator = "uuid2")
-    private UUID id;
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Type(type = "uuid-binary")*/
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 
     @Column(name="title",nullable = false)
     private String title;
@@ -27,23 +29,32 @@ public class BookEntity implements Serializable {
     @Column(name="genre",nullable = false)
     private String genre;
 
-    @Column(name="byear",nullable = false)
-    private int year;
+    @Column(name="published",nullable = false)
+    private LocalDate publishedDate;
 
-    @Column(name="summary",nullable = false)
+    @Column(name="summary")
     private String summary;
+
+   /*@ManyToOne(fetch =FetchType.LAZY,optional = false)
+    @JoinColumn(
+            name="author_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name="fk_books_authors_id")
+    )
+    private BookEntity book;*/
+
 
     public BookEntity()
     {
 
     }
 
-    public BookEntity(String title,String publisher,String genre,int year, String summary)
+    public BookEntity(String title,String publisher,String genre,LocalDate publishedDate, String summary)
     {
         this.title=title;
         this.publisher=publisher;
         this.genre=genre;
-        this.year=year;
+        this.publishedDate=publishedDate;
         this.summary=summary;
     }
 
@@ -51,11 +62,11 @@ public class BookEntity implements Serializable {
         return serialVersionUID;
     }
 
-    public UUID getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -83,13 +94,13 @@ public class BookEntity implements Serializable {
         this.genre = genre;
     }
 
-    public int getYear() {
-        return year;
+    public LocalDate getPublishedDate(){
+return publishedDate;
+}
+    public void setPublishedDate(LocalDate publishedDate) {
+        this.publishedDate = publishedDate;
     }
 
-    public void setYear(int year) {
-        this.year = year;
-    }
 
     public String getSummary() {
         return summary;
@@ -98,5 +109,7 @@ public class BookEntity implements Serializable {
     public void setSummary(String summary) {
         this.summary = summary;
     }
+
+
 
 }
